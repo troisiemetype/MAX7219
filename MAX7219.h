@@ -110,37 +110,4 @@ private:
 
 };
 
-class Matrix64:public MAX7219{
-public:
-
-	void begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin);
-
-	void setDot(uint8_t index);
-	void setDot(uint8_t col, uint8_t row);
-
-	void clrDot(uint8_t index);
-	void clrDot(uint8_t col, uint8_t row);
-
-	void setCol(uint8_t col);
-	void clrCol(uint8_t col);
-
-	void setRow(uint8_t row);
-	void clrRow(uint8_t row);
-
-protected:
-
-	inline uint8_t indexToCol(uint8_t index){return (index % 8);}
-	inline uint8_t indexToRow(uint8_t index){return (index / 8);}
-	inline uint8_t posToIndex(uint8_t col, uint8_t row){return (col + row * 8);}
-
-	void setScanLimit(uint8_t limit);
-
-	void setDecodeMode(uint8_t value);
-	void setDecodeMode(uint8_t digit, bool state);
-
-private:
-	uint8_t _state[8];
-
-};
-
 #endif
