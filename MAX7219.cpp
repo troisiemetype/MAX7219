@@ -76,3 +76,53 @@ void MAX7219::sendCommand(uint8_t address, uint8_t data){
 	shiftOut(_dataPin, _clkPin, MSBFIRST, address);
 	shiftOut(_dataPin, _clkPin, MSBFIRST, data);
 }
+
+void Matrix64::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin){
+	for(uint8_t i = 0; i < 8; i++){
+		_state[i] = 0;
+	}
+	MAX7219::begin(dataPin, loadPin, clkPin);
+}
+
+void Matrix64::setDot(uint8_t index){
+	setDot(indexToCol(index), indexToRow(index));
+}
+
+void Matrix64::setDot(uint8_t col, uint8_t row){
+	_state[row] |= _BV(col);
+	setDigit(row, _state[row]);
+}
+
+void Matrix64::clrDot(uint8_t index){
+	setDot(indexToCol(index), indexToRow(index));
+}
+
+void Matrix64::clrDot(uint8_t col, uint8_t row){
+	_state[row] &= ~_BV(col);
+	setDigit(row, _state[row]);
+}
+
+void Matrix64::setCol(uint8_t col){
+	for(uint8_t = 0; i < 8; i++){
+		_state[i] |= _BV(col);
+		setDigit(i, _state[i]);
+	}
+}
+
+void Matrix64::clrCol(uint8_t col){
+	for(uint8_t = 0; i < 8; i++){
+		_state[i] &= ~_BV(col);
+		setDigit(i, _state[i]);
+	}
+}
+
+void Matrix64::setRow(uint8_t row){
+	_state[row] = 0xFF;
+	setDigit(row, _state[row]);
+}
+
+void Matrix64::clrRow(uint8_t row){
+	_state[row] = 0x00;
+	setDigit(row, _state[row]);
+}
+
