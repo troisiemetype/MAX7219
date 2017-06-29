@@ -16,13 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Pins needed:
- * DIN (pin 1): data in. Shift bits from MCU.
- * LOAD (pin 12): update data sent on load's rising edge.
- * CLK (pin 13): 10MHz max. Data shifted into register on rising edge.
- * Data shifted out to chained chips on falling edge.
- */
+
 
 #ifndef SEVEN_SEGMENTS_H
 #define SEVEN_SEGMENTS_H
@@ -50,6 +44,30 @@ private:
 	uint8_t _nbDigit;
 
 	uint8_t _digit[8];
+};
+
+class SevenSegmentsClock{
+public:
+
+	void begin(SevenSegments* ledDriver);
+
+	void update();
+
+	void setMinutes(uint8_t minutes);
+	void setSeconds(uint8_t seconds);
+	void setDots(bool value = true);
+	void clrDots();
+	void enable(bool value = true);
+
+protected:
+	uint8_t _minutes;
+	uint8_t _seconds;
+	bool _dots;
+
+	SevenSegments* _ledDriver;
+
+	bool _enable;
+
 };
 
 #endif

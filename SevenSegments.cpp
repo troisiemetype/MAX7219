@@ -75,3 +75,65 @@ void SevenSegments::setChar(uint8_t digit, char text){
 	_digit[digit] |= newDigit;
 	MAX7219::setDigit(digit, _digit[digit]);
 }
+
+// End of the SevenSegments methods
+
+// SevenSegmentsClock methods
+
+
+void SevenSegmentsClock::begin(SevenSegments* ledDriver){
+	_ledDriver = ledDriver;
+
+	_minutes = 0;
+	_seconds = 0;
+	_dots = 0;
+	_enable = true;
+
+}
+
+void SevenSegmentsClock::update(){
+	if(_enable){
+		_ledDriver->setDigit(0, _seconds%10);
+		_ledDriver->setDigit(1, _seconds/10);
+		_ledDriver->setDigit(2, _minutes%10);
+
+		//test minutes value, so there is no leading zero displayed.
+		uint8_t tenth = _minutes/10;
+		if(tenth == 0){
+			_ledDriver->clrDigit(3);
+		} else {
+			_ledDriver->setDigit(3, _minutes%10);
+		}
+	} else {
+
+		// TODO: Try this instead, and see if the other setting are kept
+		//_ledDriver->turnOff();
+		for(uint8_t i = 0; i < 4; i++){
+			_ledDriver->clrDigit(i);
+			_ledDriver->clrDot(i);
+		}
+	}
+
+
+}
+
+void SevenSegmentsClock::setMinutes(uint8_t minutes){
+	_minutes = minutes;
+}
+
+void SevenSegmentsClock::setSeconds(uint8_t seconds){
+	_seconds = seconds;
+}
+
+void SevenSegmentsClock::setDots(bool value){
+		_ledDriver->setDot(2);
+		_dots = value;
+}
+
+void SevenSegmentsClock::clrDots(){
+	setDots(false);
+}
+
+void SevenSegmentsClock::enable(bool value){
+	_enable = value;
+}
