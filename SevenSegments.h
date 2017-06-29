@@ -29,6 +29,7 @@
 
 #include <Arduino.h>
 
+#include "MAX7219.h"
 #include "SevenSegmentsTables.h"
 
 class SevenSegments:public MAX7219{
@@ -40,6 +41,8 @@ public:
 
 	void setDot(uint8_t digit);
 	void clrDot(uint8_t digit);
+
+	void setChar(uint8_t digit, char text);
 
 protected:
 

@@ -103,10 +103,10 @@ protected:
 		SHUTDOWN_MODE = 0x0,
 		NORMAL_OPERATION = 0x1,
 	};
-
-private:
 	uint8_t _dataPin, _clkPin, _loadPin;
 	uint8_t _intensity, _limit, _decodeMode;
+
+private:
 
 };
 

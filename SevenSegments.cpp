@@ -19,7 +19,6 @@
  */
 
 
-#include "MAX7219.h"
 #include "SevenSegments.h"
 
 
@@ -55,3 +54,24 @@ void SevenSegments::clrDot(uint8_t digit){
 	MAX7219::setDigit(digit, _digit[digit]);
 }
 
+void SevenSegments::setChar(uint8_t digit, char text){
+	uint8_t newDigit = 0;
+	if(text >= '0' && text <= '9'){
+		setDigit(digit, text - '0');
+		return;
+	} else if(text >= 'a' && text <= 'z'){
+		text -= ('a' - 'A');
+	} else if(text == '-'){
+		newDigit = B01000000;
+	} else {
+		newDigit = 0;
+	}
+
+	if(text >= 'A' && text <= 'Z'){
+		newDigit = pgm_read_byte_near(chars[text - 'A']);
+	}
+
+	_digit[digit] &= ~0x7F;
+	_digit[digit] |= newDigit;
+	MAX7219::setDigit(digit, _digit[digit]);
+}
