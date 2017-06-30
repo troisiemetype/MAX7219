@@ -76,6 +76,14 @@ void SevenSegments::setChar(uint8_t digit, char text){
 	MAX7219::setDigit(digit, _digit[digit]);
 }
 
+void SevenSegments::setText(String text){
+	uint8_t length = text.length();
+	for(uint8_t i = 0; i < _nbDigit; i++){
+		if (i == length) break;
+		setChar(_nbDigit - 1 - i, text.charAt(i));
+	}
+}
+
 // End of the SevenSegments methods
 
 // SevenSegmentsClock methods

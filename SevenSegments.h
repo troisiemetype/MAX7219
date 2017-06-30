@@ -37,6 +37,7 @@ public:
 	void clrDot(uint8_t digit);
 
 	void setChar(uint8_t digit, char text);
+	void setText(String text);
 
 protected:
 
