@@ -25,9 +25,9 @@
 void SevenSegments::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin, uint8_t nbDigit){
 
 	if(nbDigit > 8) nbDigit = 8;
-	_limit = nbDigit;
 
 	MAX7219::begin(dataPin, loadPin, clkPin);
+	_limit = nbDigit;
 
 	setScanLimit(_limit);
 }
@@ -35,7 +35,7 @@ void SevenSegments::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin, uint
 void SevenSegments::setDigit(uint8_t digit, uint8_t value){
 	if(value > 9) return;
 	_digit[digit] &= ~0x7F;
-	_digit[digit] |= pgm_read_byte_near(numbers[value]);
+	_digit[digit] |= pgm_read_byte_near(numbers + value);
 	MAX7219::setDigit(digit, _digit[digit]);
 }
 
@@ -62,13 +62,13 @@ void SevenSegments::setChar(uint8_t digit, char text){
 	} else if(text >= 'a' && text <= 'z'){
 		text -= ('a' - 'A');
 	} else if(text == '-'){
-		newDigit = B01000000;
+		newDigit = pgm_read_byte_near(carret);
 	} else {
 		newDigit = 0;
 	}
 
 	if(text >= 'A' && text <= 'Z'){
-		newDigit = pgm_read_byte_near(chars[text - 'A']);
+		newDigit = pgm_read_byte_near(chars + text - 'A');
 	}
 
 	_digit[digit] &= ~0x7F;
@@ -78,9 +78,9 @@ void SevenSegments::setChar(uint8_t digit, char text){
 
 void SevenSegments::setText(String text){
 	uint8_t length = text.length();
-	for(uint8_t i = 0; i < _nbDigit; i++){
+	for(uint8_t i = 0; i < _limit; i++){
 		if (i == length) break;
-		setChar(_nbDigit - 1 - i, text.charAt(i));
+		setChar(i, text.charAt(i));
 	}
 }
 
@@ -101,16 +101,16 @@ void SevenSegmentsClock::begin(SevenSegments* ledDriver){
 
 void SevenSegmentsClock::update(){
 	if(_enable){
-		_ledDriver->setDigit(0, _seconds%10);
-		_ledDriver->setDigit(1, _seconds/10);
-		_ledDriver->setDigit(2, _minutes%10);
+		_ledDriver->setDigit(3, _seconds%10);
+		_ledDriver->setDigit(2, _seconds/10);
+		_ledDriver->setDigit(1, _minutes%10);
 
 		//test minutes value, so there is no leading zero displayed.
 		uint8_t tenth = _minutes/10;
 		if(tenth == 0){
-			_ledDriver->clrDigit(3);
+			_ledDriver->clrDigit(0);
 		} else {
-			_ledDriver->setDigit(3, _minutes%10);
+			_ledDriver->setDigit(0, _minutes/10);
 		}
 	} else {
 
@@ -134,8 +134,12 @@ void SevenSegmentsClock::setSeconds(uint8_t seconds){
 }
 
 void SevenSegmentsClock::setDots(bool value){
-		_ledDriver->setDot(2);
 		_dots = value;
+		if(value){
+			_ledDriver->setDot(1);
+		} else {
+			_ledDriver->clrDot(1);
+		}
 }
 
 void SevenSegmentsClock::clrDots(){

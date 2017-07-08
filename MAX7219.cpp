@@ -31,6 +31,8 @@ void MAX7219::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin){
 	pinMode(loadPin, OUTPUT);
 	pinMode(clkPin, OUTPUT);
 
+	digitalWrite(_loadPin, HIGH);
+
 	turnOn();
 }
 
@@ -75,6 +77,14 @@ void MAX7219::setDigit(uint8_t digit, uint8_t value){
 }
 
 void MAX7219::sendCommand(uint8_t address, uint8_t data){
+	digitalWrite(_loadPin, LOW);
 	shiftOut(_dataPin, _clkPin, MSBFIRST, address);
 	shiftOut(_dataPin, _clkPin, MSBFIRST, data);
+	digitalWrite(_loadPin, HIGH);
+}
+
+void MAX7219::clrAll(){
+	for(uint8_t i = 0; i < _limit; i++){
+		MAX7219::setDigit(i, 0);
+	}
 }

@@ -22,6 +22,7 @@
 #define SEVEN_SEGMENTS_H
 
 #include <Arduino.h>
+#include <avr/pgmspace.h>
 
 #include "MAX7219.h"
 #include "SevenSegmentsTables.h"
@@ -42,7 +43,6 @@ public:
 protected:
 
 private:
-	uint8_t _nbDigit;
 
 	uint8_t _digit[8];
 };

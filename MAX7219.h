@@ -69,6 +69,8 @@ public:
 
 	void setDigit(uint8_t digit, uint8_t value);
 
+	void clrAll();
+
 
 protected:
 
@@ -76,27 +78,27 @@ protected:
 
 	enum RegAddress_t{
 		NO_OP = 0,
-		DIGIT_0 = 0x1,
-		DIGIT_1 = 0x2,
-		DIGIT_2 = 0x3,
-		DIGIT_3 = 0x4,
-		DIGIT_4 = 0x5,
-		DIGIT_5 = 0x6,
-		DIGIT_6 = 0x7,
-		DIGIT_7 = 0x8,
-		DECODE_MODE = 0x9,
-		INTENSITY = 0xA,
-		SCAN_LIMIT = 0xB,
-		SHUTDOWN = 0xC,
-		DISPLAY_TEST = 0xF,
-		LINE_0 = 0x1,
-		LINE_1 = 0x2,
-		LINE_2 = 0x3,
-		LINE_3 = 0x4,
-		LINE_4 = 0x5,
-		LINE_5 = 0x6,
-		LINE_6 = 0x7,
-		LINE_7 = 0x8,
+		DIGIT_0 = 0x01,
+		DIGIT_1 = 0x02,
+		DIGIT_2 = 0x03,
+		DIGIT_3 = 0x04,
+		DIGIT_4 = 0x05,
+		DIGIT_5 = 0x06,
+		DIGIT_6 = 0x07,
+		DIGIT_7 = 0x08,
+		DECODE_MODE = 0x09,
+		INTENSITY = 0x0A,
+		SCAN_LIMIT = 0x0B,
+		SHUTDOWN = 0x0C,
+		DISPLAY_TEST = 0x0F,
+		LINE_0 = 0x01,
+		LINE_1 = 0x02,
+		LINE_2 = 0x03,
+		LINE_3 = 0x04,
+		LINE_4 = 0x05,
+		LINE_5 = 0x06,
+		LINE_6 = 0x07,
+		LINE_7 = 0x08,
 	};
 
 	enum Data_t{
