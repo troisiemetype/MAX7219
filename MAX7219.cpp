@@ -27,6 +27,8 @@ void MAX7219::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin){
 	_loadPin = loadPin;
 	_clkPin = clkPin;
 
+	setDecodeMode(0);
+
 	pinMode(dataPin, OUTPUT);
 	pinMode(loadPin, OUTPUT);
 	pinMode(clkPin, OUTPUT);

@@ -61,7 +61,7 @@ const uint8_t chars[] PROGMEM = {
 
 };
 
-const uint8_t carret PROGMEM = 0b00000001;
+const uint8_t carret = 0b00000001;
 const uint8_t blank PROGMEM = 0x00;
 
 #endif

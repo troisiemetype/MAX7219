@@ -29,6 +29,10 @@ void SevenSegments::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin, uint
 	MAX7219::begin(dataPin, loadPin, clkPin);
 	_limit = nbDigit;
 
+	for(uint8_t i = 0; i < 8; ++i){
+		_digit[i] = 0;
+	}
+
 	setScanLimit(_limit);
 }
 
@@ -62,7 +66,7 @@ void SevenSegments::setChar(uint8_t digit, char text){
 	} else if(text >= 'a' && text <= 'z'){
 		text -= ('a' - 'A');
 	} else if(text == '-'){
-		newDigit = pgm_read_byte_near(carret);
+		newDigit = carret;
 	} else {
 		newDigit = 0;
 	}
@@ -71,7 +75,8 @@ void SevenSegments::setChar(uint8_t digit, char text){
 		newDigit = pgm_read_byte_near(chars + text - 'A');
 	}
 
-	_digit[digit] &= ~0x7F;
+//	_digit[digit] &= ~0x7F;
+	_digit[digit] = 0;
 	_digit[digit] |= newDigit;
 	MAX7219::setDigit(digit, _digit[digit]);
 }
@@ -81,6 +86,29 @@ void SevenSegments::setText(String text){
 	for(uint8_t i = 0; i < _limit; i++){
 		if (i == length) break;
 		setChar(i, text.charAt(i));
+	}
+}
+
+void SevenSegments::setInt(uint16_t value){
+	uint8_t dim = 0;
+	if(value > 999){
+		dim = 4;
+	} else if (value > 99){
+		dim = 3;
+	} else if (value > 9){
+		dim = 2;
+	} else {
+		dim = 1;
+	}
+
+	for(uint8_t i = 0; i < _limit; i++){
+		uint8_t digit = _limit - i - 1;
+		if(i < dim){
+			setDigit(digit, value % 10);
+			value /= 10;
+		} else {
+			clrDigit(digit);
+		}
 	}
 }
 

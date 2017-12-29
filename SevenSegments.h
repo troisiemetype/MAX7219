@@ -39,6 +39,7 @@ public:
 
 	void setChar(uint8_t digit, char text);
 	void setText(String text);
+	void setInt(uint16_t value);
 
 protected:
 
