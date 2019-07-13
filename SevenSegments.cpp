@@ -23,6 +23,7 @@
 
 
 void SevenSegments::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin, uint8_t nbDigit){
+	_invert = 0;
 
 	if(nbDigit > 8) nbDigit = 8;
 
@@ -34,27 +35,39 @@ void SevenSegments::begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin, uint
 	}
 
 	setScanLimit(_limit);
+	invert(_invert);
+}
+
+void SevenSegments::invert(bool invert){
+	_invert = invert;
+	if(_invert){
+		_numbers = numbers_invert;
+		_chars = chars_invert;
+	} else {
+		_numbers = numbers;
+		_chars = chars;
+	}
 }
 
 void SevenSegments::setDigit(uint8_t digit, uint8_t value){
 	if(value > 9) return;
 	_digit[digit] &= ~0x7F;
-	_digit[digit] |= pgm_read_byte_near(numbers + value);
-	MAX7219::setDigit(digit, _digit[digit]);
+	_digit[digit] |= pgm_read_byte_near(_numbers + value);
+	MAX7219::setDigit(mirror(digit), _digit[digit]);
 }
 
 void SevenSegments::clrDigit(uint8_t digit){
 	_digit[digit] &= ~0x7F;
-	MAX7219::setDigit(digit, _digit[digit]);
+	MAX7219::setDigit(mirror(digit), _digit[digit]);
 }
 
 void SevenSegments::setDot(uint8_t digit){
-	_digit[digit] |= 0x80;
+	_digit[mirror(digit)] |= 0x80;
 	MAX7219::setDigit(digit, _digit[digit]);
 }
 
 void SevenSegments::clrDot(uint8_t digit){
-	_digit[digit] &= ~0x80;
+	_digit[mirror(digit)] &= ~0x80;
 	MAX7219::setDigit(digit, _digit[digit]);
 }
 
@@ -72,13 +85,13 @@ void SevenSegments::setChar(uint8_t digit, char text){
 	}
 
 	if(text >= 'A' && text <= 'Z'){
-		newDigit = pgm_read_byte_near(chars + text - 'A');
+		newDigit = pgm_read_byte_near(_chars + text - 'A');
 	}
 
 //	_digit[digit] &= ~0x7F;
 	_digit[digit] = 0;
 	_digit[digit] |= newDigit;
-	MAX7219::setDigit(digit, _digit[digit]);
+	MAX7219::setDigit(mirror(digit), _digit[digit]);
 }
 
 void SevenSegments::setText(String text){
@@ -109,6 +122,14 @@ void SevenSegments::setInt(uint16_t value){
 		} else {
 			clrDigit(digit);
 		}
+	}
+}
+
+uint8_t SevenSegments::mirror(uint8_t digit){
+	if(_invert){
+		return (_limit - digit - 1);
+	} else {
+		return digit;
 	}
 }
 
