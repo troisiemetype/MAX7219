@@ -31,8 +31,6 @@ class SevenSegments:public MAX7219{
 public:
 	void begin(uint8_t dataPin, uint8_t loadPin, uint8_t clkPin, uint8_t nbDigit = 8);
 
-	void invert(bool invert);
-
 	void setDigit(uint8_t digit, uint8_t value);
 	void clrDigit(uint8_t digit);
 
@@ -45,13 +43,9 @@ public:
 
 protected:
 
-	uint8_t mirror(uint8_t digit);
-
 private:
 
 	uint8_t _digit[8];
-	bool _invert;
-	uint8_t *_numbers, *_chars;
 };
 
 class SevenSegmentsClock{
