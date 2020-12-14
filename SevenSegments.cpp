@@ -164,9 +164,11 @@ void SevenSegmentsClock::setSeconds(uint8_t seconds){
 void SevenSegmentsClock::setDots(bool value){
 		_dots = value;
 		if(value){
-			_ledDriver->setDot(1);
+			_ledDriver->setDot(2);
+			_ledDriver->setDot(3);
 		} else {
-			_ledDriver->clrDot(1);
+			_ledDriver->clrDot(2);
+			_ledDriver->clrDot(3);
 		}
 }
 
